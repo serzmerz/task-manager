@@ -3,7 +3,7 @@ package com.company;
 import java.io.Serializable;
 import java.util.Iterator;
 
-public abstract class TaskList implements Serializable {
+public abstract class TaskList implements Iterable<Task>, Serializable {
     abstract void add(Task task) throws Exception;
 
     abstract boolean remove(Task task) throws Exception;
@@ -55,7 +55,7 @@ public abstract class TaskList implements Serializable {
             result.append("   task[").append(i).append("]: ").append(taskIt.toString()).append('\n');
             i++;
         }
-        result.append("\n}");
+        result.append("}");
         return result.toString();
     }
 }
