@@ -23,7 +23,7 @@ public class ArrayTaskList extends TaskList {
         return number;
     }
 
-    void add(Task task) throws Exception {
+    public void add(Task task) throws Exception {
         if(task == null) throw new Exception("Empty task don't be added");
         if (number >= size - 1) {
             Task[] arraybuf = new Task[size];
@@ -38,7 +38,7 @@ public class ArrayTaskList extends TaskList {
         number++;
     }
 
-    boolean remove(Task task) {
+    public boolean remove(Task task) {
         boolean result = false;
         for (int i = 0; i < number; i++) {
             if (task.equals(this.array[i])) {
@@ -56,12 +56,12 @@ public class ArrayTaskList extends TaskList {
         return number;
     }
 
-    Task getTask(int index) throws Exception {
-        if(array[index - 1] == null) throw new Exception("This task not found");
-        return array[index - 1];
+    public Task getTask(int index) throws Exception {
+        if(array[index] == null) throw new Exception("This task not found");
+        return array[index];
     }
 
-    ArrayTaskList incoming(int from, int to) throws Exception {
+    public ArrayTaskList incoming(int from, int to) throws Exception {
         ArrayTaskList IncommingTask = new ArrayTaskList();
         int count = 0;
 

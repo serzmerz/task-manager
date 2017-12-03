@@ -9,21 +9,21 @@ public class Task {
     private int end;
     private int interval;
 
-    Task(String title, int time) throws Exception {
+    public Task(String title, int time) throws Exception {
         this.setTitle(title);
         this.setTime(time);
     }
 
-    Task(String title, int start, int end, int interval) throws Exception {
+    public Task(String title, int start, int end, int interval) throws Exception {
         this.setTitle(title);
         this.setTime(start, end, interval);
     }
 
-    String getTitle() {
+    public String getTitle() {
         return title;
     }
 
-    private void setTitle(String title) throws Exception {
+    public void setTitle(String title) throws Exception {
         if (title == null) {
             throw new Exception ("Title can not be null");
         }
@@ -38,7 +38,7 @@ public class Task {
         this.active = active;
     }
 
-    int getTime() {
+    public int getTime() {
         if (repeat) {
             return start;
         } else {
@@ -46,7 +46,7 @@ public class Task {
         }
     }
 
-    void setTime(int time) throws Exception {
+    public void setTime(int time) throws Exception {
         if (time < 0) {
             throw new Exception ("Time can not be < 0");
         }
@@ -54,22 +54,22 @@ public class Task {
         this.time = time;
     }
 
-    int getStartTime() {
+    public int getStartTime() {
         if (!repeat) return time;
         else return start;
     }
 
-    int getEndTime() {
+    public int getEndTime() {
         if (!repeat) return time;
         else return end;
     }
 
-    int getRepeatInterval() {
+    public int getRepeatInterval() {
         if (!repeat) return 0;
         else return interval;
     }
 
-    private void setTime(int start, int end, int interval) throws Exception {
+    public void setTime(int start, int end, int interval) throws Exception {
         if (interval <= 0) {
             throw new Exception ("Interval can not be 0 or < 0");
         }
@@ -87,27 +87,26 @@ public class Task {
         this.repeat = true;
     }
 
-    private boolean isRepeated() {
+    public boolean isRepeated() {
         return repeat;
     }
 
-    int nextTimeAfter(int current) {
-        int stan = 0;
-        int currentNext = 0;
-        if (!this.isRepeated()) {
-            if (this.getStartTime() >= current) {
-                return this.getStartTime();
-            } else return -1;
-        } else {
-            for (int i = start; i <= end; i = i + interval) {
-                if (i <= current && i + interval >= current) {
-                    stan = 1;
-                    currentNext = i + interval;
+    public int nextTimeAfter(int current) {
+        if (this.isActive()) {
+            if (!this.isRepeated()) {
+                if (this.getStartTime() > current) {
+                    return this.getStartTime();
+                } else return -1;
+            } else {
+                for (int i = start; i <= end; i = i + interval) {
+                    if (i > current) return i;
+                    if(i + interval > current && i + interval <= end) {
+                        return i + interval;
+                    }
                 }
+                return -1;
             }
-            if (stan == 1) {
-                return currentNext;
-            } else return -1;
         }
+        return -1;
     }
 }

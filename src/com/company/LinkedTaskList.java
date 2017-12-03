@@ -7,7 +7,7 @@ public class LinkedTaskList extends TaskList {
     private TaskNode first;
 
     @Override
-    void add(Task task) {
+    public void add(Task task) {
         TaskNode node = new TaskNode();
         node.setTask(task);
 
@@ -23,7 +23,7 @@ public class LinkedTaskList extends TaskList {
     }
 
     @Override
-    boolean remove(Task task) throws Exception {
+    public boolean remove(Task task) throws Exception {
         if (task == null) {
             throw new Exception("incoming task is null");
         }
@@ -75,12 +75,12 @@ public class LinkedTaskList extends TaskList {
     }
 
     @Override
-    int size() {
+    public int size() {
         return sizeList;
     }
 
     @Override
-    Task getTask(int index) {
+    public Task getTask(int index) {
 
         if (index < 0 || index >= size()) {
             throw new IndexOutOfBoundsException("Index: " + index);
