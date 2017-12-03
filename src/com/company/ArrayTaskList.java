@@ -1,7 +1,7 @@
 package com.company;
 
-public class ArrayTaskList {
-    private int size = 3;
+public class ArrayTaskList extends TaskList {
+    private int size = 10;
     Task[] array = new Task[size];
     private int index = 0;
     int number = 0;
@@ -23,12 +23,13 @@ public class ArrayTaskList {
         return number;
     }
 
-    void add(Task task) {
+    void add(Task task) throws Exception {
+        if(task == null) throw new Exception("Empty task don't be added");
         if (number >= size - 1) {
             Task[] arraybuf = new Task[size];
             System.arraycopy(array, 0, arraybuf, 0, number);
             this.array = null;
-            size = size + 10;
+            size = size * 2;
             this.array = new Task[size];
             System.arraycopy(arraybuf, 0, array, 0, number);
 
@@ -55,16 +56,17 @@ public class ArrayTaskList {
         return number;
     }
 
-    Task getTask(int index) {
+    Task getTask(int index) throws Exception {
+        if(array[index - 1] == null) throw new Exception("This task not found");
         return array[index - 1];
     }
 
-    ArrayTaskList incoming(int from, int to) {
+    ArrayTaskList incoming(int from, int to) throws Exception {
         ArrayTaskList IncommingTask = new ArrayTaskList();
         int count = 0;
 
         for (int i = 0; i < number; i++) {
-            if (array[i].nextTimeAfter(from) >= from && this.array[i].nextTimeAfter(from) <= to) {
+            if (this.array[i].nextTimeAfter(from) >= from && this.array[i].nextTimeAfter(from) <= to) {
                 IncommingTask.add(array[i]);
                 count++;
             }

@@ -1,14 +1,14 @@
 package com.company;
 
 public abstract class TaskList {
-    abstract void add(Task task);
-    abstract boolean remove(Task task);
+    abstract void add(Task task) throws Exception;
+    abstract boolean remove(Task task) throws Exception;
     abstract int size();
-    abstract Task getTask(int index);
-    abstract int getSize();
+    abstract Task getTask(int index) throws Exception;
+    /* abstract int getSize();
     abstract int getIndex();
     abstract int getNumber();
-    abstract Task[] getArray();
+    abstract Task[] getArray(); */
    /*TaskList incoming(int from, int to){
         TaskList IncommingTask = new TaskList();
         int count=0;
