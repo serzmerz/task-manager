@@ -1,6 +1,9 @@
 package com.company;
 
-public class LinkedTaskList extends TaskList {
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+
+public class LinkedTaskList extends TaskList implements Iterable<Task> {
 
     private int sizeList;
     private TaskNode point;
@@ -101,5 +104,63 @@ public class LinkedTaskList extends TaskList {
             count += 1;
         }
         return point.getTask();
+    }
+
+    @Override
+    public Iterator<Task> iterator() {
+        return new LinkedTaskListIterator();
+    }
+
+
+    private class LinkedTaskListIterator implements Iterator<Task> {
+        private TaskNode lastElement;
+        private TaskNode next;
+        private int nextIndex;
+
+        public LinkedTaskListIterator() {
+            next = first;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return next != null;
+        }
+
+        @Override
+        public Task next() {
+            if(!hasNext()) throw new NoSuchElementException();
+            lastElement = next;
+            next = next.getNext();
+            nextIndex++;
+            return lastElement.getTask();
+        }
+
+        @Override
+        public void remove() {
+            if (lastElement == null) {
+                throw new IllegalStateException();
+            }
+            try {
+                LinkedTaskList.this.remove(getTask(nextIndex -1));
+                lastElement = null;
+                nextIndex--;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        public LinkedTaskList clone() throws CloneNotSupportedException{
+            LinkedTaskList result = (LinkedTaskList) super.clone();
+            result.sizeList = 0;
+            result.first = null;
+            result.point = null;
+
+            for (LinkedTaskListIterator it = this; it.hasNext(); ) {
+                Task task = it.next();
+                result.add(task.clone());
+            }
+            return result;
+        }
     }
 }

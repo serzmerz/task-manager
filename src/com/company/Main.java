@@ -1,5 +1,7 @@
 package com.company;
 
+import java.util.Iterator;
+
 public class Main {
 
     public static void main(String[] args) {
@@ -25,7 +27,22 @@ public class Main {
             }
             list1.remove(task1);
             list1.remove(task1);
-            for (int i = 0; i < list1.number; i++) {
+            ArrayTaskList TestList = new ArrayTaskList();
+            TestList.add(new Task("A", 10));
+            TestList.add(new Task("B", 10));
+            TestList.add(new Task("C", 10));
+            TestList.add(new Task("D", 10));
+            TestList.add(new Task("E", 10));
+            /* System.out.println(TestList.toString());
+            Iterator<Task> ArrayTaskListIterator =TestList.iterator();
+            System.out.println(ArrayTaskListIterator.next().getTitle());
+            ArrayTaskListIterator.remove();
+            System.out.println(TestList.toString());
+            System.out.println(ArrayTaskListIterator.next().getTitle()); */
+            System.out.println(TestList.toString());
+            TestList.remove(new Task("A", 10));
+            System.out.println(TestList.toString());
+            /* for (int i = 0; i < list1.number; i++) {
                 System.out.println(i + ". " + list1.array[i].getTitle());
             }
             System.out.println(list1.getTask(3).getTitle());
@@ -44,7 +61,7 @@ public class Main {
             linkedList.remove(task1);
             for (int i = 0; i < linkedList.size(); i++) {
                 System.out.println(i + ". " + linkedList.getTask(i).getTitle());
-            }
+            } */
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
