@@ -1,22 +1,24 @@
 package com.company;
 
+import java.io.Serializable;
+import java.util.Date;
 import java.util.Objects;
 
-public class Task implements Cloneable {
+public class Task implements Cloneable, Serializable {
     private String title;
     private boolean active;
     private boolean repeat;
-    private int time;
-    private int start;
-    private int end;
+    private Date time = new Date(0);
+    private Date start = new Date(0);
+    private Date end = new Date(0);
     private int interval;
 
-    public Task(String title, int time) throws Exception {
+    public Task(String title, Date time) throws Exception {
         this.setTitle(title);
         this.setTime(time);
     }
 
-    public Task(String title, int start, int end, int interval) throws Exception {
+    public Task(String title, Date start, Date end, int interval) throws Exception {
         this.setTitle(title);
         this.setTime(start, end, interval);
     }
@@ -40,30 +42,27 @@ public class Task implements Cloneable {
         this.active = active;
     }
 
-    public int getTime() {
+    public Date getTime() {
         if (repeat) {
-            return start;
+            return new Date(start.getTime());
         } else {
-            return time;
+            return new Date(time.getTime());
         }
     }
 
-    public void setTime(int time) throws Exception {
-        if (time < 0) {
-            throw new Exception("Time can not be < 0");
-        }
+    public void setTime(Date time) {
         this.repeat = false;
-        this.time = time;
+        this.time.setTime(time.getTime());
     }
 
-    public int getStartTime() {
-        if (!repeat) return time;
-        else return start;
+    public Date getStartTime() {
+        if (!repeat) return new Date(time.getTime());
+        else return new Date(start.getTime());
     }
 
-    public int getEndTime() {
-        if (!repeat) return time;
-        else return end;
+    public Date getEndTime() {
+        if (!repeat) return new Date(time.getTime());
+        else return new Date(end.getTime());
     }
 
     public int getRepeatInterval() {
@@ -71,20 +70,20 @@ public class Task implements Cloneable {
         else return interval;
     }
 
-    public void setTime(int start, int end, int interval) throws Exception {
+    public void setTime(Date start, Date end, int interval) throws Exception {
         if (interval <= 0) {
             throw new Exception("Interval can not be 0 or < 0");
         }
 
-        if (start > end) {
+        if (start.after(end)) {
             throw new Exception("Start time can not be > endTime");
         }
 
-        if (interval >= end - start) {
+        if (interval >= end.getTime() - start.getTime()) {
             throw new Exception("Interval can not be >= EndTime - Time");
         }
-        this.start = start;
-        this.end = end;
+        this.start.setTime(start.getTime());
+        this.end.setTime(end.getTime());
         this.interval = interval;
         this.repeat = true;
     }
@@ -93,23 +92,23 @@ public class Task implements Cloneable {
         return repeat;
     }
 
-    public int nextTimeAfter(int current) {
+    public Date nextTimeAfter(Date current) {
         if (this.isActive()) {
             if (!this.isRepeated()) {
-                if (this.getStartTime() > current) {
+                if (this.getStartTime().after(current)) {
                     return this.getStartTime();
-                } else return -1;
+                } else return null;
             } else {
-                for (int i = start; i <= end; i = i + interval) {
-                    if (i > current) return i;
-                    if (i + interval > current && i + interval <= end) {
-                        return i + interval;
+                for (long i = start.getTime(); i <= end.getTime(); i = i + interval * 1000) {
+                    if (i > current.getTime()) return new Date(i);
+                    if (i + interval * 1000 > current.getTime() && i + interval * 1000 <= end.getTime()) {
+                        return new Date(i + interval * 1000);
                     }
                 }
-                return -1;
+                return null;
             }
         }
-        return -1;
+        return null;
     }
 
     @Override
@@ -129,7 +128,7 @@ public class Task implements Cloneable {
     public int hashCode() {
         int result = 13;
         result = 28 * result + title.hashCode();
-        result = 28 * result + time;
+        result = 28 * result + (int) time.getTime();
         result = 28 * result + (repeat ? 1 : 0);
         result = 28 * result + (active ? 1 : 0);
 

@@ -1,25 +1,15 @@
 package com.company;
 
+import java.util.Date;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 public class ArrayTaskList extends TaskList implements Iterable<Task>, Cloneable {
-    private int size = 10;
-    Task[] array = new Task[size];
-    private int index = 0;
-    int number = 0;
-
-
-    public int getSize() {
-        return size;
-    }
+    private Task[] array = new Task[20];
+    private int number = 0;
 
     public Task[] getArray() {
         return array;
-    }
-
-    public int getIndex() {
-        return index;
     }
 
     public int getNumber() {
@@ -27,7 +17,7 @@ public class ArrayTaskList extends TaskList implements Iterable<Task>, Cloneable
     }
 
     public void add(Task task) throws Exception {
-        if(task == null) throw new Exception("Empty task don't be added");
+        if (task == null) throw new Exception("Empty task don't be added");
         Task tempArrayTask[] = new Task[number + 1];
 
         System.arraycopy(array, 0, tempArrayTask, 0, number);
@@ -41,33 +31,25 @@ public class ArrayTaskList extends TaskList implements Iterable<Task>, Cloneable
         boolean result = false;
         for (int i = 0; i < number; i++) {
             if (task.equals(this.array[i])) {
-                if(i == number - 1){
+                if (i == number - 1) {
                     this.array[i] = this.array[number - 1];
                     this.array[number - 1] = null;
                     number--;
 
-                    // copy old array in new
                     Task tempArrayTask[] = new Task[number];
-                    for (int k=0; k < number; k++)
-                        tempArrayTask[k] = array[k];
+                    System.arraycopy(array, 0, tempArrayTask, 0, number);
                     array = tempArrayTask;
 
                     result = true;
                     break;
                 }
-                // not last element, fist found
-                for (int j = i; j < number-1; j++) {
-                    array[j] = array[j + 1];
-                }
-                array[number-1] = null;
+                System.arraycopy(array, i + 1, array, i, number - 1 - i);
+                array[number - 1] = null;
                 number--;
 
-                // copy old array in new
                 Task tempArrayTask[] = new Task[number];
-                for (int k=0; k < number; k++)
-                    tempArrayTask[k] = array[k];
+                System.arraycopy(array, 0, tempArrayTask, 0, number);
                 array = tempArrayTask;
-
 
                 result = true;
                 break;
@@ -81,23 +63,8 @@ public class ArrayTaskList extends TaskList implements Iterable<Task>, Cloneable
     }
 
     public Task getTask(int index) throws Exception {
-        if(array[index] == null) throw new IndexOutOfBoundsException("This task not found");
+        if (array[index] == null) throw new IndexOutOfBoundsException("This task not found");
         return array[index];
-    }
-
-    public ArrayTaskList incoming(int from, int to) throws Exception {
-        ArrayTaskList IncommingTask = new ArrayTaskList();
-        int count = 0;
-
-        for (int i = 0; i < number; i++) {
-            if (this.array[i].nextTimeAfter(from) >= from && this.array[i].nextTimeAfter(from) <= to) {
-                IncommingTask.add(array[i]);
-                count++;
-            }
-        }
-
-        IncommingTask.number = count;
-        return IncommingTask;
     }
 
 
@@ -117,10 +84,10 @@ public class ArrayTaskList extends TaskList implements Iterable<Task>, Cloneable
 
         @Override
         public Task next() {
-             if(!hasNext()) throw new NoSuchElementException();
-             lastReturned = pointer;
-             pointer = pointer + 1;
-             return array[lastReturned];
+            if (!hasNext()) throw new NoSuchElementException();
+            lastReturned = pointer;
+            pointer = pointer + 1;
+            return array[lastReturned];
         }
 
         @Override

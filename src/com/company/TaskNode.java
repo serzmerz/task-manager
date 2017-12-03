@@ -1,7 +1,7 @@
 package com.company;
 
 public class TaskNode {
-    private Task     task;
+    private Task task;
     private TaskNode next;
 
     /**
@@ -12,8 +12,7 @@ public class TaskNode {
     }
 
     /**
-     * @param task
-     * add task in list
+     * @param task add task in list
      */
     public void setTask(Task task) {
         this.task = task;
@@ -27,8 +26,7 @@ public class TaskNode {
     }
 
     /**
-     * @param next
-     * set next task in list
+     * @param next set next task in list
      */
     public void setNext(TaskNode next) {
         this.next = next;
